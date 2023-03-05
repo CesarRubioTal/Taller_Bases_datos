@@ -1,0 +1,153 @@
+ySQL Shell 8.0.29
+
+Copyright (c) 2016, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 10
+Server version: 8.0.29 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| bdpendientes       |
+| eva1               |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| nomina             |
+| orders             |
+| performance_schema |
+| sys                |
++--------------------+
+9 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  SQL > \use evaluacion_1
+Default schema set to `evaluacion_1`.
+Fetching table and column names from `evaluacion_1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > show tables;
++------------------------+
+| Tables_in_evaluacion_1 |
++------------------------+
+| primer_tabla           |
++------------------------+
+1 row in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > create table empleados;
+ERROR: 4028 (HY000): A table must have at least one visible column.
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > create table empleados(
+                                             -> id varchar(50));
+Query OK, 0 rows affected (0.0153 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla(
+                                             -> id,nombre, apellidos)
+                                             -> values(
+                                             -> 1342, ´cesarin´, ´Rubio´);
+ERROR: 1054 (42S22): Unknown column '´cesarin´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc primer tabla;
+ERROR: 1146 (42S02): Table 'evaluacion_1.primer' doesn't exist
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc primer_tabla;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id        | int         | YES  |     | NULL    |       |
+| nombre    | varchar(50) | YES  |     | NULL    |       |
+| apellidos | varchar(30) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id,nombre, apellidos) values( 1342, ´cesarin´, ´Rubio´);
+ERROR: 1054 (42S22): Unknown column '´cesarin´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id,nombre, apellidos) values( 1342, ´cesar´, ´Rubio´);
+ERROR: 1054 (42S22): Unknown column '´cesar´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id,nombre , apellidos) values( 1342, ´cesar´, ´Rubio´);
+ERROR: 1054 (42S22): Unknown column '´cesar´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values( 1342, ´cesar´, ´Rubio´);
+ERROR: 1054 (42S22): Unknown column '´cesar´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values( 1342, ´CESAR´, ´Rubio´);
+ERROR: 1054 (42S22): Unknown column '´CESAR´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values( 1342, ´CESAR´, ´RUBIO´);
+ERROR: 1054 (42S22): Unknown column '´CESAR´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values( 1342, , ´RUBIO´);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', ´RUBIO´)' at line 1
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values( 1342,´aa´ , ´RUBIO´);
+ERROR: 1054 (42S22): Unknown column '´aa´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values ( 2,´toron´ , ´RUBIO´);
+ERROR: 1054 (42S22): Unknown column '´toron´' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values ( 2,'cesarin' , 'rubio');
+Query OK, 1 row affected (0.0030 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc primer_tabla;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id        | int         | YES  |     | NULL    |       |
+| nombre    | varchar(50) | YES  |     | NULL    |       |
+| apellidos | varchar(30) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > select * from primer_tabla;
++----+---------+-----------+
+| id | nombre  | apellidos |
++----+---------+-----------+
+|  2 | cesarin | rubio     |
++----+---------+-----------+
+1 row in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values ( 2,'cesarin' , 'rubio');
+Query OK, 1 row affected (0.0021 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > select * from primer_tabla;
++----+---------+-----------+
+| id | nombre  | apellidos |
++----+---------+-----------+
+|  2 | cesarin | rubio     |
+|  2 | cesarin | rubio     |
++----+---------+-----------+
+2 rows in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre , apellidos) values ( 2,'cesarin');
+ERROR: 1136 (21S01): Column count doesn't match value count at row 1
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > insert into primer_tabla( id , nombre) values ( 2,'cesarin');
+Query OK, 1 row affected (0.0023 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > select * from primer_tabla;
++----+---------+-----------+
+| id | nombre  | apellidos |
++----+---------+-----------+
+|  2 | cesarin | rubio     |
+|  2 | cesarin | rubio     |
+|  2 | cesarin | NULL      |
++----+---------+-----------+
+3 rows in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > update primer_tabla
+                                             -> set nombre= cesar
+                                             -> where apellidos = 'rubio';
+ERROR: 1054 (42S22): Unknown column 'cesar' in 'field list'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > update primer_tabla set nombre= 'cesar'  where apellidos = 'rubio';
+Query OK, 2 rows affected (0.0031 sec)
+
+Rows matched: 2  Changed: 2  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > select * from primer_tabla;
++----+---------+-----------+
+| id | nombre  | apellidos |
++----+---------+-----------+
+|  2 | cesar   | rubio     |
+|  2 | cesar   | rubio     |
+|  2 | cesarin | NULL      |
++----+---------+-----------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > delete from primer_tabla
+                                             -> where nombre= 'cesar'
+                                             -> ;
+Query OK, 2 rows affected (0.0027 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > select * from primer_tabla;
++----+---------+-----------+
+| id | nombre  | apellidos |
++----+---------+-----------+
+|  2 | cesarin | NULL      |
++----+---------+-----------+
+1 row in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > delete from primer_tabla;
+Query OK, 1 row affected (0.0028 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > select * from primer_tabla;
+Empty set (0.0004 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL >

@@ -1,0 +1,233 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > create database Agencia;
+ERROR: Not connected.
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > create database Agencia;
+Query OK, 1 row affected (0.0061 sec)
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| eva1               |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+9 rows in set (0.0037 sec)
+ MySQL  localhost:3306 ssl  SQL > use agencia;
+Default schema set to `agencia`.
+Fetching global names, object names from `agencia` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  agencia  SQL > create table(
+                                        -> Numero_de_serie id key
+                                        -> marca varchar(30) not null;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+Numero_de_serie id key
+marca varchar(30) not null' at line 1
+ MySQL  localhost:3306 ssl  agencia  SQL > create table( Numero_de_serie int auto_increment key, marca varchar(30) not null, modelo varchar(30) not null, año int check (año> 1900 and año<2025) not null, precio int check (precio>0) not null);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '( Numero_de_serie int auto_increment key, marca varchar(30) not null, modelo var' at line 1
+ MySQL  localhost:3306 ssl  agencia  SQL > create table automovil ( Numero_de_serie int auto_increment key, marca varchar(30) not null, modelo varchar(30) not null, año int check (año> 1900 and año<2025) not null, precio int check (precio>0) not null);
+Query OK, 0 rows affected (0.0175 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > desc automovil;
++-----------------+-------------+------+-----+---------+----------------+
+| Field           | Type        | Null | Key | Default | Extra          |
++-----------------+-------------+------+-----+---------+----------------+
+| Numero_de_serie | int         | NO   | PRI | NULL    | auto_increment |
+| marca           | varchar(30) | NO   |     | NULL    |                |
+| modelo          | varchar(30) | NO   |     | NULL    |                |
+| año             | int         | NO   |     | NULL    |                |
+| precio          | int         | NO   |     | NULL    |                |
++-----------------+-------------+------+-----+---------+----------------+
+5 rows in set (0.0085 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > create table vendedor(
+                                        -> clave int auto_increment key,
+                                        -> apellidos varchar(50) not null,
+                                        -> nombre varchar(50) not null,
+                                        -> rfc varchar(20) not null,
+                                        -> comision int enum ('3','5','10'));
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'enum ('3','5','10'))' at line 6
+ MySQL  localhost:3306 ssl  agencia  SQL > create table vendedor( clave int auto_increment key, apellidos varchar(50) not null, nombre varchar(50) not null, rfc varchar(13) not null, comision enum ('3','5','10'));
+Query OK, 0 rows affected (0.0134 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > desc vendedor;
++-----------+--------------------+------+-----+---------+----------------+
+| Field     | Type               | Null | Key | Default | Extra          |
++-----------+--------------------+------+-----+---------+----------------+
+| clave     | int                | NO   | PRI | NULL    | auto_increment |
+| apellidos | varchar(50)        | NO   |     | NULL    |                |
+| nombre    | varchar(50)        | NO   |     | NULL    |                |
+| rfc       | varchar(20)        | NO   |     | NULL    |                |
+| comision  | enum('3','5','10') | YES  |     | NULL    |                |
++-----------+--------------------+------+-----+---------+----------------+
+5 rows in set (0.0023 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > drop table vendedor;
+Query OK, 0 rows affected (0.0118 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > create table vendedor( clave int auto_increment key, apellidos varchar(50) not null, nombre varchar(50) not null, rfc varchar(13) not null, comision enum ('3','5','10') not null);
+Query OK, 0 rows affected (0.0119 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > desc vendedor;
++-----------+--------------------+------+-----+---------+----------------+
+| Field     | Type               | Null | Key | Default | Extra          |
++-----------+--------------------+------+-----+---------+----------------+
+| clave     | int                | NO   | PRI | NULL    | auto_increment |
+| apellidos | varchar(50)        | NO   |     | NULL    |                |
+| nombre    | varchar(50)        | NO   |     | NULL    |                |
+| rfc       | varchar(20)        | NO   |     | NULL    |                |
+| comision  | enum('3','5','10') | NO   |     | NULL    |                |
++-----------+--------------------+------+-----+---------+----------------+
+5 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > create table cliente(
+                                        -> clave int auto_increment key,
+                                        -> apellidos varchar(50) not null,
+                                        -> nombre varchar(50) not null,
+                                        -> tipo_cliente enum ('fisica', 'moral'),
+                                        -> razon_social varchar(60),
+                                        -> rfc varchar(13) not null );
+Query OK, 0 rows affected (0.0117 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > desc cliente;
++--------------+------------------------+------+-----+---------+----------------+
+| Field        | Type                   | Null | Key | Default | Extra          |
++--------------+------------------------+------+-----+---------+----------------+
+| clave        | int                    | NO   | PRI | NULL    | auto_increment |
+| apellidos    | varchar(50)            | NO   |     | NULL    |                |
+| nombre       | varchar(50)            | NO   |     | NULL    |                |
+| tipo_cliente | enum('fisica','moral') | YES  |     | NULL    |                |
+| razon_social | varchar(60)            | YES  |     | NULL    |                |
+| rfc          | varchar(13)            | NO   |     | NULL    |                |
++--------------+------------------------+------+-----+---------+----------------+
+6 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > desc agencia;
+ERROR: 1146 (42S02): Table 'agencia.agencia' doesn't exist
+ MySQL  localhost:3306 ssl  agencia  SQL > desc automovil;
++-----------------+-------------+------+-----+---------+----------------+
+| Field           | Type        | Null | Key | Default | Extra          |
++-----------------+-------------+------+-----+---------+----------------+
+| Numero_de_serie | int         | NO   | PRI | NULL    | auto_increment |
+| marca           | varchar(30) | NO   |     | NULL    |                |
+| modelo          | varchar(30) | NO   |     | NULL    |                |
+| año             | int         | NO   |     | NULL    |                |
+| precio          | int         | NO   |     | NULL    |                |
++-----------------+-------------+------+-----+---------+----------------+
+5 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into automovil(Numero_de_serie, marca, modelo, año, precio)
+                                        -> values(
+                                        -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into automovil( marca, modelo, año, precio)  values(
+                                        -> 'NISSAN', 'VERSA', 2022, 500000);
+Query OK, 1 row affected (0.0095 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > select * from automovil;
++-----------------+--------+--------+------+--------+
+| Numero_de_serie | marca  | modelo | año | precio |
++-----------------+--------+--------+------+--------+
+|               1 | NISSAN | VERSA  | 2022 | 500000 |
++-----------------+--------+--------+------+--------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > desc vendedor;
++-----------+--------------------+------+-----+---------+----------------+
+| Field     | Type               | Null | Key | Default | Extra          |
++-----------+--------------------+------+-----+---------+----------------+
+| clave     | int                | NO   | PRI | NULL    | auto_increment |
+| apellidos | varchar(50)        | NO   |     | NULL    |                |
+| nombre    | varchar(50)        | NO   |     | NULL    |                |
+| rfc       | varchar(13)        | NO   |     | NULL    |                |
+| comision  | enum('3','5','10') | NO   |     | NULL    |                |
++-----------+--------------------+------+-----+---------+----------------+
+5 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into vendedor(apellidos, nombre, rfc, comision)
+                                        -> vaalues ('Guilbert', 'isai', 'GUGI020516HCH', '3');
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'vaalues ('Guilbert', 'isai', 'GUGI020516HCH', '3')' at line 2
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into vendedor(apellidos, nombre, rfc, comision) vaalues ('Guilbert', 'isai', 'GUGI020516HCH', 3);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'vaalues ('Guilbert', 'isai', 'GUGI020516HCH', 3)' at line 1
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into vendedor(apellidos, nombre, rfc, comision) values ('Guilbert', 'isai', 'GUGI020516HCH', '3');
+Query OK, 1 row affected (0.0041 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > select * from vendedor;
++-------+-----------+--------+---------------+----------+
+| clave | apellidos | nombre | rfc           | comision |
++-------+-----------+--------+---------------+----------+
+|     1 | Guilbert  | isai   | GUGI020516HCH | 3        |
++-------+-----------+--------+---------------+----------+
+1 row in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into automovil( marca, modelo, año, precio)  values(  'NISSAN', 'VERSA', 1899, 500000);
+ERROR: 3819 (HY000): Check constraint 'automovil_chk_1' is violated.
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into automovil( marca, modelo, año, precio)  values(  'NISSAN', 'VERSA', 189999, 500000);
+ERROR: 3819 (HY000): Check constraint 'automovil_chk_1' is violated.
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into vendedor(apellidos, nombre, rfc, comision) values ('Guilbert', 'isai', 'GUGI020516HCH', '9');
+ERROR: 1265 (01000): Data truncated for column 'comision' at row 1
+ MySQL  localhost:3306 ssl  agencia  SQL > desc cliente;
++--------------+------------------------+------+-----+---------+----------------+
+| Field        | Type                   | Null | Key | Default | Extra          |
++--------------+------------------------+------+-----+---------+----------------+
+| clave        | int                    | NO   | PRI | NULL    | auto_increment |
+| apellidos    | varchar(50)            | NO   |     | NULL    |                |
+| nombre       | varchar(50)            | NO   |     | NULL    |                |
+| tipo_cliente | enum('fisica','moral') | YES  |     | NULL    |                |
+| razon_social | varchar(60)            | YES  |     | NULL    |                |
+| rfc          | varchar(13)            | NO   |     | NULL    |                |
++--------------+------------------------+------+-----+---------+----------------+
+6 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into cliente(apellidos, nombre, tipo_cliente, razon_social, rfc)
+                                        -> values('Rubio', 'Cesar', 'moral', 'RODTYAJ1772931', 'CERT898723564');
+Query OK, 1 row affected (0.0042 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > select * from cliente;
++-------+-----------+--------+--------------+----------------+---------------+
+| clave | apellidos | nombre | tipo_cliente | razon_social   | rfc           |
++-------+-----------+--------+--------------+----------------+---------------+
+|     1 | Rubio     | Cesar  | moral        | RODTYAJ1772931 | CERT898723564 |
++-------+-----------+--------+--------------+----------------+---------------+
+1 row in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into cliente(apellidos, nombre, tipo_cliente, razon_social, rfc) values('Rubio', 'Cesar', 'fisicos', 'RODTYAJ1772931', 'CERT898723564');
+ERROR: 1265 (01000): Data truncated for column 'tipo_cliente' at row 1
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into vendedor(apellidos, nombre, rfc, comision) values ('Lopez', 'juan', 'QUQI020516HCH', '5');
+Query OK, 1 row affected (0.0045 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > select * from automovil;
++-----------------+--------+--------+------+--------+
+| Numero_de_serie | marca  | modelo | año | precio |
++-----------------+--------+--------+------+--------+
+|               1 | NISSAN | VERSA  | 2022 | 500000 |
++-----------------+--------+--------+------+--------+
+1 row in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > select * from vendedor;
++-------+-----------+--------+---------------+----------+
+| clave | apellidos | nombre | rfc           | comision |
++-------+-----------+--------+---------------+----------+
+|     1 | Guilbert  | isai   | GUGI020516HCH | 3        |
+|     2 | Lopez     | juan   | QUQI020516HCH | 5        |
++-------+-----------+--------+---------------+----------+
+2 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into automovil( marca, modelo, año, precio)  values(  'KIA', 'OPTIMA', 1901, 30000);
+Query OK, 1 row affected (0.0035 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > select * from automovil;
++-----------------+--------+--------+------+--------+
+| Numero_de_serie | marca  | modelo | año | precio |
++-----------------+--------+--------+------+--------+
+|               1 | NISSAN | VERSA  | 2022 | 500000 |
+|               2 | KIA    | OPTIMA | 1901 |  30000 |
++-----------------+--------+--------+------+--------+
+2 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > insert into cliente(apellidos, nombre, tipo_cliente, razon_social, rfc) values('Solis', 'Pablito', 'fisica', 'PABHOYAJ1772931', 'PABO898723564');
+Query OK, 1 row affected (0.0044 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > select * from cliente;
++-------+-----------+---------+--------------+-----------------+---------------+
+| clave | apellidos | nombre  | tipo_cliente | razon_social    | rfc           |
++-------+-----------+---------+--------------+-----------------+---------------+
+|     1 | Rubio     | Cesar   | moral        | RODTYAJ1772931  | CERT898723564 |
+|     2 | Solis     | Pablito | fisica       | PABHOYAJ1772931 | PABO898723564 |
++-------+-----------+---------+--------------+-----------------+---------------+
+2 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL >
