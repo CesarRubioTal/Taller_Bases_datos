@@ -1,0 +1,258 @@
+MySQL Shell 8.0.29
+
+Copyright (c) 2016, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 15
+Server version: 8.0.29 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  SQL > \use sakila
+Default schema set to `sakila`.
+Fetching global names, object names from `sakila` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  sakila  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > desc customer;
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type              | Null | Key | Default           | Extra                                         |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| customer_id | smallint unsigned | NO   | PRI | NULL              | auto_increment                                |
+| store_id    | tinyint unsigned  | NO   | MUL | NULL              |                                               |
+| first_name  | varchar(45)       | NO   |     | NULL              |                                               |
+| last_name   | varchar(45)       | NO   | MUL | NULL              |                                               |
+| email       | varchar(50)       | YES  |     | NULL              |                                               |
+| address_id  | smallint unsigned | NO   | MUL | NULL              |                                               |
+| active      | tinyint(1)        | NO   |     | 1                 |                                               |
+| create_date | datetime          | NO   |     | NULL              |                                               |
+| last_update | timestamp         | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+9 rows in set (0.0053 sec) 
+MySQL  localhost:3306 ssl  sakila  SQL > select customer_id, staff_id, amount from payment limit 50;
++-------------+----------+--------+
+| customer_id | staff_id | amount |
++-------------+----------+--------+
+|           1 |        1 |   2.99 |
+|           1 |        1 |   0.99 |
+|           1 |        1 |   5.99 |
+|           1 |        2 |   0.99 |
+|           1 |        2 |   9.99 |
+|           1 |        1 |   4.99 |
+|           1 |        1 |   4.99 |
+|           1 |        2 |   0.99 |
+|           1 |        1 |   3.99 |
+|           1 |        2 |   5.99 |
+|           1 |        1 |   5.99 |
+|           1 |        1 |   4.99 |
+|           1 |        1 |   4.99 |
+|           1 |        1 |   7.99 |
+|           1 |        2 |   2.99 |
+|           1 |        1 |   4.99 |
+|           1 |        2 |   4.99 |
+|           1 |        1 |   0.99 |
+|           1 |        2 |   0.99 |
+|           1 |        2 |   2.99 |
+|           1 |        2 |   2.99 |
+|           1 |        2 |   4.99 |
+|           1 |        2 |   3.99 |
+|           1 |        1 |   0.99 |
+|           1 |        2 |   4.99 |
+|           1 |        1 |   0.99 |
+|           1 |        2 |   0.99 |
+|           1 |        2 |   2.99 |
+|           1 |        1 |   0.99 |
+|           1 |        1 |   1.99 |
+|           1 |        2 |   2.99 |
+|           1 |        1 |   5.99 |
+|           2 |        1 |   4.99 |
+|           2 |        1 |   2.99 |
+|           2 |        1 |   2.99 |
+|           2 |        1 |   6.99 |
+|           2 |        2 |   4.99 |
+|           2 |        1 |   5.99 |
+|           2 |        2 |   5.99 |
+|           2 |        2 |   5.99 |
+|           2 |        1 |   2.99 |
+|           2 |        2 |   5.99 |
+|           2 |        1 |   4.99 |
+|           2 |        2 |  10.99 |
+|           2 |        2 |   0.99 |
+|           2 |        2 |   6.99 |
+|           2 |        2 |   6.99 |
+|           2 |        1 |   2.99 |
+|           2 |        1 |   0.99 |
+|           2 |        1 |   0.99 |
++-------------+----------+--------+
+50 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select distinct (staff_id) from payment;
++----------+
+| staff_id |
++----------+
+|        1 |
+|        2 |
++----------+
+2 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select staff_id, sum(amount) as total
+                                       -> from payment
+                                       -> grup by staff:id;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by staff:id' at line 3
+ MySQL  localhost:3306 ssl  sakila  SQL > select staff_id, sum(amount) as total from payment grup by staff_id;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by staff_id' at line 1
+ MySQL  localhost:3306 ssl  sakila  SQL > select staff_id, sum(amount) as total from payment group by staff_id;
++----------+----------+
+| staff_id | total    |
++----------+----------+
+|        1 | 33482.50 |
+|        2 | 33924.06 |
++----------+----------+
+2 rows in set (0.0376 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select sum(amount) as total from payment;
++----------+
+| total    |
++----------+
+| 67406.56 |
++----------+
+1 row in set (0.0073 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select staff_id, count(amount) as numero from payment group by staff_id;
++----------+--------+
+| staff_id | numero |
++----------+--------+
+|        1 |   8054 |
+|        2 |   7990 |
++----------+--------+
+2 rows in set (0.0281 sec)
+
+
+select category_id, count(film_id) as total from film_category grup by category_id;
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select sum(amount) as total from payment;
++----------+
+| total    |
++----------+
+| 67406.56 |
++----------+
+1 row in set (0.0073 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select staff_id, count(amount) as numero from payment group by staff_id;
++----------+--------+
+| staff_id | numero |
++----------+--------+
+|        1 |   8054 |
+|        2 |   7990 |
++----------+--------+
+2 rows in set (0.0281 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > desc flim_category;
+ERROR: 1146 (42S02): Table 'sakila.flim_category' doesn't exist
+ MySQL  localhost:3306 ssl  sakila  SQL > select count(film_id)from film_category;
++----------------+
+| count(film_id) |
++----------------+
+|           1000 |
++----------------+
+1 row in set (0.0144 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select distinct(category_id) from film_category;
++-------------+
+| category_id |
++-------------+
+|           1 |
+|           2 |
+|           3 |
+|           4 |
+|           5 |
+|           6 |
+|           7 |
+|           8 |
+|           9 |
+|          10 |
+|          11 |
+|          12 |
+|          13 |
+|          14 |
+|          15 |
+|          16 |
++-------------+
+16 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select category_id, count(film_id)as total
+                                       -> from film_category
+                                       -> select category_id, count(film_id)as total from film_category grup by category_id;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by category_id' at line 1            
+ MySQL  localhost:3306 ssl  sakila  SQL > desc film;
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Field                | Type                                                                | Null | Key | Default           | Extra                                         |
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| film_id              | smallint unsigned                                                   | NO   | PRI | NULL              | auto_increment                                |
+| title                | varchar(128)                                                        | NO   | MUL | NULL              |                                               |
+| description          | text                                                                | YES  |     | NULL              |                                               |
+| release_year         | year                                                                | YES  |     | NULL              |                                               |
+| language_id          | tinyint unsigned                                                    | NO   | MUL | NULL              |                                               |
+| original_language_id | tinyint unsigned                                                    | YES  | MUL | NULL              |                                               |
+| rental_duration      | tinyint unsigned                                                    | NO   |     | 3                 |                                               |
+| rental_rate          | decimal(4,2)                                                        | NO   |     | 4.99              |                                               |
+| length               | smallint unsigned                                                   | YES  |     | NULL              |                                               |
+| replacement_cost     | decimal(5,2)                                                        | NO   |     | 19.99             |                                               |
+| rating               | enum('G','PG','PG-13','R','NC-17')                                  | YES  |     | G                 |                                               |
+| special_features     | set('Trailers','Commentaries','Deleted Scenes','Behind the Scenes') | YES  |     | NULL              |                                               |
+| last_update          | timestamp                                                           | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+13 rows in set (0.0034 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from lenguage;
+ERROR: 1146 (42S02): Table 'sakila.lenguage' doesn't exist
+ MySQL  localhost:3306 ssl  sakila  SQL > show tables;
++----------------------------+
+| Tables_in_sakila           |
++----------------------------+
+| actor                      |
+| actor_info                 |
+| address                    |
+| category                   |
+| city                       |
+| country                    |
+| customer                   |
+| customer_list              |
+| film                       |
+| film_actor                 |
+| film_category              |
+| film_list                  |
+| film_text                  |
+| inventory                  |
+| language                   |
+| nicer_but_slower_film_list |
+| payment                    |
+| rental                     |
+| sales_by_film_category     |
+| sales_by_store             |
+| staff                      |
+| staff_list                 |
+| store                      |
++----------------------------+
+23 rows in set (0.0017 sec)
