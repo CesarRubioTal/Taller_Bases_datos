@@ -1,0 +1,113 @@
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  SQL > \connect -mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): n
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 9
+Server version: 8.0.12 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306 ssl  SQL > use eva_2
+Default schema set to `eva_2`.
+Fetching table and column names from `eva_2` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create tabla contactos(
+                                     ... contacto_id int auto_increment
+                                     ... nombre varchar(50)
+                                     ... compañia varchar(50)
+                                     ... direccion varchar(50)
+                                     ... zipcode int);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tabla contactos(
+contacto_id int auto_increment
+nombre varchar(50)
+compañia var' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table contactos( contacto_id int auto_increment nombre varchar(50) compañia varchar(50) direccion varchar(50) zipcode int);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'nombre varchar(50) compañia varchar(50) direccion varchar(50) zipcode int)' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table contactos( contacto_id int auto_increment, nombre varchar(50), compañia varchar(50), direccion varchar(50), zipcode int);
+ERROR: 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table contactos( contacto_id int auto_increment key, nombre varchar(50), compañia varchar(50), direccion varchar(50), zipcode int);
+Query OK, 0 rows affected (0.9933 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table phones(
+                                     ... phone_id int
+                                     ... contact id int
+                                     ... phone int;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'contact id int
+phone int' at line 3                     foreign key(contact_id) references(contacto_id) on delete cascade on update cascade                                     foreign key(contact_id) references(contacto_id) on delete cascade on update cas
+                                     ... foreign key(contact_id) references(contacto_id) on delete cascade on update cas
+                                     ... ;oreign key(contact_id) references(contacto_id) on delete cascade on update cas
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(contacto_id) on delete cascade on update cascade' at line 2
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table phones(  phone_id int, contact_id int, phone int, foreign key(contact_id) references(contacto_id) on delete cascade on update cascade ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(contacto_id) on delete cascade on update cascade' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table phones(  phone_id int, contact_id int, phone int, foreign key(contact_id) references(contacto_id) on delete cascade on update cascade) ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(contacto_id) on delete cascade on update cascade)' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table phones(phone_id int, contact_id int, phone int, foreign key(contact_id) references(contacto_id) on delete cascade on update cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(contacto_id) on delete cascade on update cascade)' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table phones(phone_id int, contact_id int, phone int, foreign key(contact_id) references contactos(contacto_id) on delete cascade on update cascade);
+Query OK, 0 rows affected (0.7595 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contactos( contacto_id int auto_increment key, nombre varchar(50), compañia varchar(50), direccion varchar(50), zipcode int)
+                                     ... values(
+                                     ... 1,
+                                     ... ´isaias´
+                                     ... , ´telcel´
+                                     ... , dkg,
+                                     ... 7641);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int auto_increment key, nombre varchar(50), compañia varchar(50), direccion var' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contactos( contacto_id int auto_increment key, nombre varchar(50), compañia varchar(50), direccion varchar(50), zipcode int,  values( 1, ´isaias´ , ´telcel´ , dkg, 7641);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int auto_increment key, nombre varchar(50), compañia varchar(50), direccion var' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contactos( contacto_id int auto_increment key, nombre varchar(50), compañia varchar(50), direccion varchar(50), zipcode in,  values( 1, ´isaias´ , ´telcel´ , dkg, 7641);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int auto_increment key, nombre varchar(50), compañia varchar(50), direccion var' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contactos( contacto_id int auto_increment key, nombre varchar(50), compañia varchar(50), direccion varchar(50), zipcode in)  values( 1, ´isaias´ , ´telcel´ , ´gdud´, 7641);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int auto_increment key, nombre varchar(50), compañia varchar(50), direccion var' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc contacto;
+ERROR: 1146 (42S02): Table 'eva_2.contacto' doesn't exist
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc contactos;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| contacto_id | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nombre      | varchar(50) | YES  |     | NULL    |                |
+| compañia   | varchar(50) | YES  |     | NULL    |                |
+| direccion   | varchar(50) | YES  |     | NULL    |                |
+| zipcode     | int(11)     | YES  |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+5 rows in set (0.0020 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contactos(  nombre, compañia, direccion, zipcode)  values( 1, ´isaias´ , ´telcel´ , ´gdud´, 7641);
+ERROR: 1136 (21S01): Column count doesn't match value count at row 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contactos(  nombre, compañia, direccion, zipcode)  values( ´isaias´ , ´telcel´ , ´gdud´, 7641);
+ERROR: 1054 (42S22): Unknown column '´isaias´' in 'field list'
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contactos(  nombre, compañia, direccion, zipcode)  values( 'isaias' , 'telcel' , 'gdud', 7641);
+Query OK, 1 row affected (0.1981 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL >
+
