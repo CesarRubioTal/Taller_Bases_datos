@@ -1,0 +1,602 @@
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  SQL > \connect -mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): n
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.12 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306 ssl  SQL > \use eva2
+MySQL Error 1049 (42000): ClassicSession.runSql: Unknown database 'eva2'
+
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| escuela            |
+| eva_2              |
+| information_schema |
+| mysql              |
+| new_schema         |
+| new_schema1        |
+| orders             |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+11 rows in set (0.0007 sec)
+
+ MySQL  localhost:3306 ssl  SQL > \use eva_2
+Default schema set to `eva_2`.
+Fetching table and column names from `eva_2` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > show tables;
++-----------------+
+| Tables_in_eva_2 |
++-----------------+
+| contactos       |
+| detalle_factura |
+| factura         |
+| maestro         |
+| phones          |
+| tablea          |
+| tableb          |
++-----------------+
+7 rows in set (0.0013 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select *from tablea;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
++----+--------+
+4 rows in set (0.0118 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select *from tableb;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | X      |
+|  2 | Y      |
+|  3 | Z      |
+|  4 | A      |
+|  5 | B      |
++----+--------+
+5 rows in set (0.0237 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select *
+                                     ... drom tablea a
+                                     ... inner join table b b
+                                     ... on a.nombre = b.nombre;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'drom tablea a
+inner join table b b
+on a.nombre = b.nombre' at line 2
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from tablea a inner join table b b on a.nombre = b.nombre;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table b b on a.nombre = b.nombre' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from tablea a inner join tableb b on a.nombre = b.nombre;
++----+--------+----+--------+
+| id | nombre | id | nombre |
++----+--------+----+--------+
+|  1 | A      |  4 | A      |
+|  2 | B      |  5 | B      |
++----+--------+----+--------+
+2 rows in set (0.0006 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select *
+                                     ... from table a
+                                     ... inner join table b
+                                     ... on a.id = b.id;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table a
+inner join table b
+on a.id = b.id' at line 2
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from tablea a inner join tableb b on a.id = b.id;
++----+--------+----+--------+
+| id | nombre | id | nombre |
++----+--------+----+--------+
+|  1 | A      |  1 | X      |
+|  2 | B      |  2 | Y      |
+|  3 | C      |  3 | Z      |
+|  4 | D      |  4 | A      |
++----+--------+----+--------+
+4 rows in set (0.0005 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select a.nombre ,b.nombre
+                                     ... from tablea
+                                     ... inner join tableb b
+                                     ... on a.nombre = b.nombre;
+ERROR: 1054 (42S22): Unknown column 'a.nombre' in 'field list'
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select a.nombre  ,b.nombre from tablea a inner join tableb b on a.nombre = b.nombre;
++--------+--------+
+| nombre | nombre |
++--------+--------+
+| A      | A      |
+| B      | B      |
++--------+--------+
+2 rows in set (0.0005 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > \use sakila
+Default schema set to `sakila`.
+Fetching table and column names from `sakila` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306 ssl  sakila  SQL > show tables;
++----------------------------+
+| Tables_in_sakila           |
++----------------------------+
+| actor                      |
+| actor_info                 |
+| address                    |
+| category                   |
+| city                       |
+| country                    |
+| customer                   |
+| customer_list              |
+| film                       |
+| film_actor                 |
+| film_category              |
+| film_list                  |
+| film_text                  |
+| inventory                  |
+| language                   |
+| nicer_but_slower_film_list |
+| payment                    |
+| rental                     |
+| sales_by_film_category     |
+| sales_by_store             |
+| staff                      |
+| staff_list                 |
+| store                      |
++----------------------------+
+23 rows in set (0.0015 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc  rental;
++--------------+-----------------------+------+-----+-------------------+-----------------------------+
+| Field        | Type                  | Null | Key | Default           | Extra                       |
++--------------+-----------------------+------+-----+-------------------+-----------------------------+
+| rental_id    | int(11)               | NO   | PRI | NULL              | auto_increment              |
+| rental_date  | datetime              | NO   | MUL | NULL              |                             |
+| inventory_id | mediumint(8) unsigned | NO   | MUL | NULL              |                             |
+| customer_id  | smallint(5) unsigned  | NO   | MUL | NULL              |                             |
+| return_date  | datetime              | YES  |     | NULL              |                             |
+| staff_id     | tinyint(3) unsigned   | NO   | MUL | NULL              |                             |
+| last_update  | timestamp             | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++--------------+-----------------------+------+-----+-------------------+-----------------------------+
+7 rows in set (0.0014 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select *
+                                      ...
+                                      ... ;
+ERROR: 1096 (HY000): No tables used
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.rental_date , a.return_date,
+                                      ... b.first_name, b.last_name
+                                      ... from rental a
+                                      ... inner join customer b
+                                      ... on a.customer_id = b.customer_id
+                                      ... limit 20;
++---------------------+---------------------+------------+-----------+
+| rental_date         | return_date         | first_name | last_name |
++---------------------+---------------------+------------+-----------+
+| 2005-05-25 11:30:37 | 2005-06-03 12:00:37 | MARY       | SMITH     |
+| 2005-05-28 10:35:23 | 2005-06-03 06:32:23 | MARY       | SMITH     |
+| 2005-06-15 00:54:12 | 2005-06-23 02:42:12 | MARY       | SMITH     |
+| 2005-06-15 18:02:53 | 2005-06-19 15:54:53 | MARY       | SMITH     |
+| 2005-06-15 21:08:46 | 2005-06-25 02:26:46 | MARY       | SMITH     |
+| 2005-06-16 15:18:57 | 2005-06-17 21:05:57 | MARY       | SMITH     |
+| 2005-06-18 08:41:48 | 2005-06-22 03:36:48 | MARY       | SMITH     |
+| 2005-06-18 13:33:59 | 2005-06-19 17:40:59 | MARY       | SMITH     |
+| 2005-06-21 06:24:45 | 2005-06-28 03:28:45 | MARY       | SMITH     |
+| 2005-07-08 03:17:05 | 2005-07-14 01:19:05 | MARY       | SMITH     |
+| 2005-07-08 07:33:56 | 2005-07-12 13:25:56 | MARY       | SMITH     |
+| 2005-07-09 13:24:07 | 2005-07-14 14:01:07 | MARY       | SMITH     |
+| 2005-07-09 16:38:01 | 2005-07-13 18:02:01 | MARY       | SMITH     |
+| 2005-07-11 10:13:46 | 2005-07-19 13:15:46 | MARY       | SMITH     |
+| 2005-07-27 11:31:22 | 2005-07-31 06:50:22 | MARY       | SMITH     |
+| 2005-07-28 09:04:45 | 2005-07-30 12:37:45 | MARY       | SMITH     |
+| 2005-07-28 16:18:23 | 2005-07-30 17:56:23 | MARY       | SMITH     |
+| 2005-07-28 17:33:39 | 2005-07-29 20:17:39 | MARY       | SMITH     |
+| 2005-07-28 19:20:07 | 2005-07-29 22:54:07 | MARY       | SMITH     |
+| 2005-07-29 03:58:49 | 2005-08-01 05:16:49 | MARY       | SMITH     |
++---------------------+---------------------+------------+-----------+
+20 rows in set (0.0933 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.rental_date , a.return_date, b.first_name, b.last_name from rental a inner join customer b on a.customer_id = b.customer_id limit 20 order by b.last_name;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order by b.last_name' at line 1
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.rental_date , a.return_date, b.first_name, b.last_name from rental a inner join customer b on a.customer_id = b.customer_id order by b.last_name limit 20;
++---------------------+---------------------+------------+-----------+
+| rental_date         | return_date         | first_name | last_name |
++---------------------+---------------------+------------+-----------+
+| 2005-05-26 01:34:28 | 2005-05-29 04:00:28 | RAFAEL     | ABNEY     |
+| 2005-05-28 19:14:09 | 2005-06-05 14:01:09 | RAFAEL     | ABNEY     |
+| 2005-06-16 20:17:20 | 2005-06-20 23:55:20 | RAFAEL     | ABNEY     |
+| 2005-06-17 03:36:02 | 2005-06-19 08:12:02 | RAFAEL     | ABNEY     |
+| 2005-06-19 18:04:18 | 2005-06-28 23:52:18 | RAFAEL     | ABNEY     |
+| 2005-06-20 19:41:28 | 2005-06-28 00:32:28 | RAFAEL     | ABNEY     |
+| 2005-07-07 00:26:43 | 2005-07-16 03:58:43 | RAFAEL     | ABNEY     |
+| 2005-07-08 02:22:45 | 2005-07-14 20:53:45 | RAFAEL     | ABNEY     |
+| 2005-07-11 00:16:35 | 2005-07-20 01:30:35 | RAFAEL     | ABNEY     |
+| 2005-07-11 17:23:33 | 2005-07-12 16:27:33 | RAFAEL     | ABNEY     |
+| 2005-07-12 00:27:08 | 2005-07-14 03:12:08 | RAFAEL     | ABNEY     |
+| 2005-07-28 07:15:32 | 2005-08-06 05:00:32 | RAFAEL     | ABNEY     |
+| 2005-08-01 01:10:33 | 2005-08-10 02:45:33 | RAFAEL     | ABNEY     |
+| 2005-08-02 01:19:33 | 2005-08-08 06:54:33 | RAFAEL     | ABNEY     |
+| 2005-08-02 10:08:40 | 2005-08-05 14:59:40 | RAFAEL     | ABNEY     |
+| 2005-08-17 15:40:47 | 2005-08-20 19:55:47 | RAFAEL     | ABNEY     |
+| 2005-08-20 06:22:08 | 2005-08-28 02:22:08 | RAFAEL     | ABNEY     |
+| 2005-08-21 10:27:21 | 2005-08-23 10:46:21 | RAFAEL     | ABNEY     |
+| 2005-08-22 00:48:23 | 2005-08-28 01:02:23 | RAFAEL     | ABNEY     |
+| 2005-08-23 00:30:26 | 2005-08-28 06:29:26 | RAFAEL     | ABNEY     |
++---------------------+---------------------+------------+-----------+
+20 rows in set (0.0050 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > show tables;
++----------------------------+
+| Tables_in_sakila           |
++----------------------------+
+| actor                      |
+| actor_info                 |
+| address                    |
+| category                   |
+| city                       |
+| country                    |
+| customer                   |
+| customer_list              |
+| film                       |
+| film_actor                 |
+| film_category              |
+| film_list                  |
+| film_text                  |
+| inventory                  |
+| language                   |
+| nicer_but_slower_film_list |
+| payment                    |
+| rental                     |
+| sales_by_film_category     |
+| sales_by_store             |
+| staff                      |
+| staff_list                 |
+| store                      |
++----------------------------+
+23 rows in set (0.0016 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc fil_actor;
+ERROR: 1146 (42S02): Table 'sakila.fil_actor' doesn't exist
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc film_actor;
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                 | Null | Key | Default           | Extra                       |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| actor_id    | smallint(5) unsigned | NO   | PRI | NULL              |                             |
+| film_id     | smallint(5) unsigned | NO   | PRI | NULL              |                             |
+| last_update | timestamp            | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.0014 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc actor;
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                 | Null | Key | Default           | Extra                       |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| actor_id    | smallint(5) unsigned | NO   | PRI | NULL              | auto_increment              |
+| first_name  | varchar(45)          | NO   |     | NULL              |                             |
+| last_name   | varchar(45)          | NO   | MUL | NULL              |                             |
+| last_update | timestamp            | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+4 rows in set (0.0014 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select count (*) from film;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*) from film' at line 1
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select tittle from film limit 50;
+ERROR: 1054 (42S22): Unknown column 'tittle' in 'field list'
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select title from film limit 50;
++-----------------------------+
+| title                       |
++-----------------------------+
+| ACADEMY DINOSAUR            |
+| ACE GOLDFINGER              |
+| ADAPTATION HOLES            |
+| AFFAIR PREJUDICE            |
+| AFRICAN EGG                 |
+| AGENT TRUMAN                |
+| AIRPLANE SIERRA             |
+| AIRPORT POLLOCK             |
+| ALABAMA DEVIL               |
+| ALADDIN CALENDAR            |
+| ALAMO VIDEOTAPE             |
+| ALASKA PHANTOM              |
+| ALI FOREVER                 |
+| ALICE FANTASIA              |
+| ALIEN CENTER                |
+| ALLEY EVOLUTION             |
+| ALONE TRIP                  |
+| ALTER VICTORY               |
+| AMADEUS HOLY                |
+| AMELIE HELLFIGHTERS         |
+| AMERICAN CIRCUS             |
+| AMISTAD MIDSUMMER           |
+| ANACONDA CONFESSIONS        |
+| ANALYZE HOOSIERS            |
+| ANGELS LIFE                 |
+| ANNIE IDENTITY              |
+| ANONYMOUS HUMAN             |
+| ANTHEM LUKE                 |
+| ANTITRUST TOMATOES          |
+| ANYTHING SAVANNAH           |
+| APACHE DIVINE               |
+| APOCALYPSE FLAMINGOS        |
+| APOLLO TEEN                 |
+| ARABIA DOGMA                |
+| ARACHNOPHOBIA ROLLERCOASTER |
+| ARGONAUTS TOWN              |
+| ARIZONA BANG                |
+| ARK RIDGEMONT               |
+| ARMAGEDDON LOST             |
+| ARMY FLINTSTONES            |
+| ARSENIC INDEPENDENCE        |
+| ARTIST COLDBLOODED          |
+| ATLANTIS CAUSE              |
+| ATTACKS HATE                |
+| ATTRACTION NEWTON           |
+| AUTUMN CROW                 |
+| BABY HALL                   |
+| BACKLASH UNDEFEATED         |
+| BADMAN DAWN                 |
+| BAKED CLEOPATRA             |
++-----------------------------+
+50 rows in set (0.0319 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select film_id ,title from film limit 50;
++---------+-----------------------------+
+| film_id | title                       |
++---------+-----------------------------+
+|       1 | ACADEMY DINOSAUR            |
+|       2 | ACE GOLDFINGER              |
+|       3 | ADAPTATION HOLES            |
+|       4 | AFFAIR PREJUDICE            |
+|       5 | AFRICAN EGG                 |
+|       6 | AGENT TRUMAN                |
+|       7 | AIRPLANE SIERRA             |
+|       8 | AIRPORT POLLOCK             |
+|       9 | ALABAMA DEVIL               |
+|      10 | ALADDIN CALENDAR            |
+|      11 | ALAMO VIDEOTAPE             |
+|      12 | ALASKA PHANTOM              |
+|      13 | ALI FOREVER                 |
+|      14 | ALICE FANTASIA              |
+|      15 | ALIEN CENTER                |
+|      16 | ALLEY EVOLUTION             |
+|      17 | ALONE TRIP                  |
+|      18 | ALTER VICTORY               |
+|      19 | AMADEUS HOLY                |
+|      20 | AMELIE HELLFIGHTERS         |
+|      21 | AMERICAN CIRCUS             |
+|      22 | AMISTAD MIDSUMMER           |
+|      23 | ANACONDA CONFESSIONS        |
+|      24 | ANALYZE HOOSIERS            |
+|      25 | ANGELS LIFE                 |
+|      26 | ANNIE IDENTITY              |
+|      27 | ANONYMOUS HUMAN             |
+|      28 | ANTHEM LUKE                 |
+|      29 | ANTITRUST TOMATOES          |
+|      30 | ANYTHING SAVANNAH           |
+|      31 | APACHE DIVINE               |
+|      32 | APOCALYPSE FLAMINGOS        |
+|      33 | APOLLO TEEN                 |
+|      34 | ARABIA DOGMA                |
+|      35 | ARACHNOPHOBIA ROLLERCOASTER |
+|      36 | ARGONAUTS TOWN              |
+|      37 | ARIZONA BANG                |
+|      38 | ARK RIDGEMONT               |
+|      39 | ARMAGEDDON LOST             |
+|      40 | ARMY FLINTSTONES            |
+|      41 | ARSENIC INDEPENDENCE        |
+|      42 | ARTIST COLDBLOODED          |
+|      43 | ATLANTIS CAUSE              |
+|      44 | ATTACKS HATE                |
+|      45 | ATTRACTION NEWTON           |
+|      46 | AUTUMN CROW                 |
+|      47 | BABY HALL                   |
+|      48 | BACKLASH UNDEFEATED         |
+|      49 | BADMAN DAWN                 |
+|      50 | BAKED CLEOPATRA             |
++---------+-----------------------------+
+50 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc fil_actor;
+ERROR: 1146 (42S02): Table 'sakila.fil_actor' doesn't exist
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc film_actor;
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                 | Null | Key | Default           | Extra                       |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| actor_id    | smallint(5) unsigned | NO   | PRI | NULL              |                             |
+| film_id     | smallint(5) unsigned | NO   | PRI | NULL              |                             |
+| last_update | timestamp            | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.0015 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from film_actor
+                                      ... where film_id=1;
++----------+---------+---------------------+
+| actor_id | film_id | last_update         |
++----------+---------+---------------------+
+|        1 |       1 | 2006-02-15 06:05:03 |
+|       10 |       1 | 2006-02-15 06:05:03 |
+|       20 |       1 | 2006-02-15 06:05:03 |
+|       30 |       1 | 2006-02-15 06:05:03 |
+|       40 |       1 | 2006-02-15 06:05:03 |
+|       53 |       1 | 2006-02-15 06:05:03 |
+|      108 |       1 | 2006-02-15 06:05:03 |
+|      162 |       1 | 2006-02-15 06:05:03 |
+|      188 |       1 | 2006-02-15 06:05:03 |
+|      198 |       1 | 2006-02-15 06:05:03 |
++----------+---------+---------------------+
+10 rows in set (0.1461 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc actor;
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                 | Null | Key | Default           | Extra                       |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| actor_id    | smallint(5) unsigned | NO   | PRI | NULL              | auto_increment              |
+| first_name  | varchar(45)          | NO   |     | NULL              |                             |
+| last_name   | varchar(45)          | NO   | MUL | NULL              |                             |
+| last_update | timestamp            | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+4 rows in set (0.0015 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select first _name, last:name
+                                      ... from actor
+                                      ... where id in (
+                                      ... select  actor_id * from film_actor
+                                      ... where film_id=1);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':name
+from actor
+where id in (
+select  actor_id * from film_actor
+where film_' at line 1
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select first _name, last:name  from actor  where ACTO_id in ( select  actor_id * from film_actor  where film_id=1);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':name  from actor  where ACTO_id in ( select  actor_id * from film_actor  where ' at line 1
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select first _name, last:name  from actor  where actor_id in ( select  actor_id  from film_actor  where film_id=1);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':name  from actor  where actor_id in ( select  actor_id  from film_actor  where ' at line 1
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select first _name, last_name  from actor  where actor_id in ( select  actor_id  from film_actor  where film_id=1);
+ERROR: 1054 (42S22): Unknown column 'first' in 'field list'
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select first_name, last_name  from actor  where actor_id in ( select  actor_id  from film_actor  where film_id=1);
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| PENELOPE   | GUINESS   |
+| CHRISTIAN  | GABLE     |
+| LUCILLE    | TRACY     |
+| SANDRA     | PECK      |
+| JOHNNY     | CAGE      |
+| MENA       | TEMPLE    |
+| WARREN     | NOLTE     |
+| OPRAH      | KILMER    |
+| ROCK       | DUKAKIS   |
+| MARY       | KEITEL    |
++------------+-----------+
+10 rows in set (0.0200 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.title, c.first_name,c.last_name
+                                      ... from film a
+                                      ... inner join film_actor b on a.film_id = b.film_id
+                                      ... inner join actor c on b.actor_id = c.actor_id
+                                      ... where a.film_id =1;
++------------------+------------+-----------+
+| title            | first_name | last_name |
++------------------+------------+-----------+
+| ACADEMY DINOSAUR | PENELOPE   | GUINESS   |
+| ACADEMY DINOSAUR | CHRISTIAN  | GABLE     |
+| ACADEMY DINOSAUR | LUCILLE    | TRACY     |
+| ACADEMY DINOSAUR | SANDRA     | PECK      |
+| ACADEMY DINOSAUR | JOHNNY     | CAGE      |
+| ACADEMY DINOSAUR | MENA       | TEMPLE    |
+| ACADEMY DINOSAUR | WARREN     | NOLTE     |
+| ACADEMY DINOSAUR | OPRAH      | KILMER    |
+| ACADEMY DINOSAUR | ROCK       | DUKAKIS   |
+| ACADEMY DINOSAUR | MARY       | KEITEL    |
++------------------+------------+-----------+
+10 rows in set (0.0176 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.title, c.first_name,c.last_name from film a inner join film_actor b on a.film_id = b.film_id inner join actor c on b.actor_id = c.actor_id where a.film_id =15;
++--------------+------------+-----------+
+| title        | first_name | last_name |
++--------------+------------+-----------+
+| ALIEN CENTER | BURT       | DUKAKIS   |
+| ALIEN CENTER | KENNETH    | PALTROW   |
+| ALIEN CENTER | SIDNEY     | CROWE     |
+| ALIEN CENTER | RENEE      | TRACY     |
+| ALIEN CENTER | HUMPHREY   | WILLIS    |
+| ALIEN CENTER | MENA       | HOPPER    |
++--------------+------------+-----------+
+6 rows in set (0.0007 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc film;
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+| Field                | Type                                                                | Null | Key | Default           | Extra                       |
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+| film_id              | smallint(5) unsigned                                                | NO   | PRI | NULL              | auto_increment              |
+| title                | varchar(255)                                                        | NO   | MUL | NULL              |                             |
+| description          | text                                                                | YES  |     | NULL              |                             |
+| release_year         | year(4)                                                             | YES  |     | NULL              |                             |
+| language_id          | tinyint(3) unsigned                                                 | NO   | MUL | NULL              |                             |
+| original_language_id | tinyint(3) unsigned                                                 | YES  | MUL | NULL              |                             |
+| rental_duration      | tinyint(3) unsigned                                                 | NO   |     | 3                 |                             |
+| rental_rate          | decimal(4,2)                                                        | NO   |     | 4.99              |                             |
+| length               | smallint(5) unsigned                                                | YES  |     | NULL              |                             |
+| replacement_cost     | decimal(5,2)                                                        | NO   |     | 19.99             |                             |
+| rating               | enum('G','PG','PG-13','R','NC-17')                                  | YES  |     | G                 |                             |
+| special_features     | set('Trailers','Commentaries','Deleted Scenes','Behind the Scenes') | YES  |     | NULL              |                             |
+| last_update          | timestamp                                                           | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+13 rows in set (0.0017 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc languaje;
+ERROR: 1146 (42S02): Table 'sakila.languaje' doesn't exist
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc languaje_id;
+ERROR: 1146 (42S02): Table 'sakila.languaje_id' doesn't exist
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc language;
++-------------+---------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                | Null | Key | Default           | Extra                       |
++-------------+---------------------+------+-----+-------------------+-----------------------------+
+| language_id | tinyint(3) unsigned | NO   | PRI | NULL              | auto_increment              |
+| name        | char(20)            | NO   |     | NULL              |                             |
+| last_update | timestamp           | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+---------------------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.0014 sec)
+
+ MySQL  localhost:3306 ssl  sakila  SQL > desc film;
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+| Field                | Type                                                                | Null | Key | Default           | Extra                       |
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+| film_id              | smallint(5) unsigned                                                | NO   | PRI | NULL              | auto_increment              |
+| title                | varchar(255)                                                        | NO   | MUL | NULL              |                             |
+| description          | text                                                                | YES  |     | NULL              |                             |
+| release_year         | year(4)                                                             | YES  |     | NULL              |                             |
+| language_id          | tinyint(3) unsigned                                                 | NO   | MUL | NULL              |                             |
+| original_language_id | tinyint(3) unsigned                                                 | YES  | MUL | NULL              |                             |
+| rental_duration      | tinyint(3) unsigned                                                 | NO   |     | 3                 |                             |
+| rental_rate          | decimal(4,2)                                                        | NO   |     | 4.99              |                             |
+| length               | smallint(5) unsigned                                                | YES  |     | NULL              |                             |
+| replacement_cost     | decimal(5,2)                                                        | NO   |     | 19.99             |                             |
+| rating               | enum('G','PG','PG-13','R','NC-17')                                  | YES  |     | G                 |                             |
+| special_features     | set('Trailers','Commentaries','Deleted Scenes','Behind the Scenes') | YES  |     | NULL              |                             |
+| last_update          | timestamp                                                           | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++----------------------+---------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+13 rows in set (0.0018 sec)
+                                          select a.title from film a inner join  on a.film_id = b.film_id ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'on a.film_id = b.film_id' at line 1
+
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.title, b.name from film a inner join language b
+
+
