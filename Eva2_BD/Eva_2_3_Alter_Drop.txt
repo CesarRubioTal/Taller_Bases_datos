@@ -1,0 +1,159 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > \use eva_2
+Default schema set to `eva_2`.
+Fetching global names, object names from `eva_2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  eva_2  SQL > show tables;
++-----------------+
+| Tables_in_eva_2 |
++-----------------+
+| contacts        |
+| detalle         |
+| detalle_factura |
+| factura         |
+| maestro         |
+| phones          |
++-----------------+
+6 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table detalle
+                                      -> drop constraint detalle_ibfk_1;
+Query OK, 0 rows affected (0.0402 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_2  SQL > show create table detalle;
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                                                                                                 |
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| detalle | CREATE TABLE `detalle` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_maestro` int DEFAULT NULL,
+  `dato` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_maestro` (`id_maestro`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from maestro;
++----+-------+
+| id | dato  |
++----+-------+
+|  1 | algo1 |
+|  3 | algo3 |
+|  4 | algo4 |
+|  6 | algo2 |
++----+-------+
+4 rows in set (0.0031 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc detalle;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id         | int         | NO   | PRI | NULL    | auto_increment |
+| id_maestro | int         | YES  | MUL | NULL    |                |
+| dato       | varchar(20) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+3 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into detalle(id_maestro) value(5);
+Query OK, 1 row affected (0.0061 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from detalle;
++----+------------+------+
+| id | id_maestro | dato |
++----+------------+------+
+|  4 |          1 | algo |
+|  5 |          5 | NULL |
++----+------------+------+
+2 rows in set (0.0005 sec)
+ references maestro(id) on delete cascade on update cascade' at line 1
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table detalle add foreing key (id_maestro) references maestro(id) on delete cascade on update cascade;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key (id_maestro) references maestro(id) on delete cascade on update cascade' at line 1
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc information_schema.table_constraints;
++--------------------+-------------+------+-----+---------+-------+
+| Field              | Type        | Null | Key | Default | Extra |
++--------------------+-------------+------+-----+---------+-------+
+| CONSTRAINT_CATALOG | varchar(64) | YES  |     | NULL    |       |
+| CONSTRAINT_SCHEMA  | varchar(64) | YES  |     | NULL    |       |
+| CONSTRAINT_NAME    | varchar(64) | YES  |     | NULL    |       |
+| TABLE_SCHEMA       | varchar(64) | YES  |     | NULL    |       |
+| TABLE_NAME         | varchar(64) | YES  |     | NULL    |       |
+| CONSTRAINT_TYPE    | varchar(11) | NO   |     |         |       |
+| ENFORCED           | varchar(3)  | NO   |     |         |       |
++--------------------+-------------+------+-----+---------+-------+
+7 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > \use evaluacion_1;
+Default schema set to `evaluacion_1`.
+Fetching global names, object names from `evaluacion_1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > select constraints_name, constraints_type, table_name, from information_schema.table_constraints where constraint_type = 'CHECK';
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from information_schema.table_constraints where constraint_type = 'CHECK'' at line 1
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > \use eva_2;
+Default schema set to `eva_2`.
+Fetching global names, object names from `eva_2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table phones drop constraint phones_ibfk_1;
+Query OK, 0 rows affected (0.0283 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table phones add foreing(contact_is) references contacts(contact_id) on delete restrict on update set null;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(contact_is) references contacts(contact_id) on delete restrict on update set nu' at line 1
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table phones add foreign key (contact_is) references contacts(contact_id) on delete restrict on update set null;
+ERROR: 1072 (42000): Key column 'contact_is' doesn't exist in table
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table phones add foreign key (contact_id) references contacts(contact_id) on delete restrict on update set null;
+Query OK, 0 rows affected (0.0510 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from phones;
+Empty set (0.0005 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from contacts;
++------------+------+---------+---------+---------+
+| contact_id | name | company | address | zipcode |
++------------+------+---------+---------+---------+
+|          1 | joe  | abc     | 123     | 12345   |
+|          2 | joe  | xnc     | 123     | 12345   |
+|          3 | joe  | bmm     | 123     | 12345   |
+|          4 | bill | bcm     | 123     | 12345   |
++------------+------+---------+---------+---------+
+4 rows in set (0.0041 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into phones(contact_id) values(1);
+Query OK, 1 row affected (0.0019 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc contacts;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| contact_id | int         | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(50) | YES  |     | NULL    |                |
+| company    | varchar(50) | YES  |     | NULL    |                |
+| address    | varchar(50) | YES  |     | NULL    |                |
+| zipcode    | varchar(50) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+5 rows in set (0.0018 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contacts(name) values('juan');
+Query OK, 1 row affected (0.0029 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from contacts;
++------------+------+---------+---------+---------+
+| contact_id | name | company | address | zipcode |
++------------+------+---------+---------+---------+
+|          1 | joe  | abc     | 123     | 12345   |
+|          2 | joe  | xnc     | 123     | 12345   |
+|          3 | joe  | bmm     | 123     | 12345   |
+|          4 | bill | bcm     | 123     | 12345   |
+|          5 | juan | NULL    | NULL    | NULL    |
++------------+------+---------+---------+---------+
+5 rows in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into contacts(name) values('juan');
+Query OK, 1 row affected (0.0019 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from phones;
++-----------+------------+-------+
+| phones_id | contact_id | phone |
++-----------+------------+-------+
+|         1 |          1 | NULL  |
++-----------+------------+-------+

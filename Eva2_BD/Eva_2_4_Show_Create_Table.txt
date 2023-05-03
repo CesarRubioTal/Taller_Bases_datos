@@ -1,0 +1,120 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > \use eva_2
+Default schema set to `eva_2`.
+Fetching global names, object names from `eva_2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table salesreps(
+                                      -> id int,
+                                      -> lastname varchar(50),
+                                      -> firstname varchar(50),
+                                      -> commission in;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in' at line 5
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table customers( id int auto_increment key, lastname varchar(50), firstname varchar(50), companyname varchar(50), street_1 varchar(50), street_2 varchar(50), city varchar(50), state varchar(50), zipcode int, phone varchar(10), fax varchar(50), email varchar(50), foreign key (id) references orders(id) on delete restrict on update cascade);
+Query OK, 0 rows affected (0.0181 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table items( id int auto_increment key, o_id int, p_id int, quantitiy varchar(50));
+Query OK, 0 rows affected (0.0124 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table items add foreign key(id) references parts(id) on delete restrict on update cascade;
+Query OK, 0 rows affected (0.0430 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table salesreps add foreign key(id) references customers(id) on delete restrict on update cascade;
+Query OK, 0 rows affected (0.0404 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table parts add foreign key(id) references salesreps(id) on delete restrict on update cascade;
+Query OK, 0 rows affected (0.0442 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  eva_2  SQL > show create table salesreps;
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table     | Create Table                                                                                                                                                                                                                                                                                                                                                                                  |
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| salesreps | CREATE TABLE `salesreps` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `lastname` varchar(50) DEFAULT NULL,
+  `firstname` varchar(50) DEFAULT NULL,
+  `commission` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `salesreps_ibfk_1` FOREIGN KEY (`id`) REFERENCES `customers` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > show create table customers;
++-----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table     | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
++-----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| customers | CREATE TABLE `customers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `lastname` varchar(50) DEFAULT NULL,
+  `firstname` varchar(50) DEFAULT NULL,
+  `companyname` varchar(50) DEFAULT NULL,
+  `street_1` varchar(50) DEFAULT NULL,
+  `street_2` varchar(50) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `state` varchar(50) DEFAULT NULL,
+  `zipcode` int DEFAULT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `fax` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`id`) REFERENCES `orders` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-----------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0043 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > show create table orders;
++--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table  | Create Table                                                                                                                                                                                                                                                                                                                                      |
++--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| orders | CREATE TABLE `orders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `c_id` varchar(50) DEFAULT NULL,
+  `orderdate` varchar(50) DEFAULT NULL,
+  `shipdate` varchar(50) DEFAULT NULL,
+  `paiddate` varchar(50) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++--------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0025 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > show create table items;
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                                                                                                                                                                                                    |
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| items | CREATE TABLE `items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `o_id` int DEFAULT NULL,
+  `p_id` int DEFAULT NULL,
+  `quantitiy` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `items_ibfk_1` FOREIGN KEY (`id`) REFERENCES `parts` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > show create table parts;
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                      |
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| parts | CREATE TABLE `parts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(50) DEFAULT NULL,
+  `uniprice` varchar(50) DEFAULT NULL,
+  `onhand` varchar(50) DEFAULT NULL,
+  `reorder` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `parts_ibfk_1` FOREIGN KEY (`id`) REFERENCES `salesreps` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0007 sec)
