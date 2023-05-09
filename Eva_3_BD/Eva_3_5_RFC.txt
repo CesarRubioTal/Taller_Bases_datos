@@ -1,0 +1,157 @@
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  SQL > \connect -mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): n
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 8.0.12 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306 ssl  SQL > show tables;
+ERROR: 1046 (3D000): No database selected
+
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| comp2              |
+| company            |
+| escuela            |
+| eva_2              |
+| eva_3              |
+| information_schema |
+| mysql              |
+| new_schema         |
+| new_schema1        |
+| orders             |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+14 rows in set (0.0009 sec)
+
+ MySQL  localhost:3306 ssl  SQL > \use eva_3
+Default schema set to `eva_3`.
+Fetching table and column names from `eva_3` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > show tables;
++-----------------+
+| Tables_in_eva_3 |
++-----------------+
+| personas        |
++-----------------+
+1 row in set (0.0011 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > select personas;
+ERROR: 1054 (42S22): Unknown column 'personas' in 'field list'
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > desc personas;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| id           | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nombre       | varchar(50) | NO   |     | NULL    |                |
+| apellido_pat | varchar(50) | NO   |     | NULL    |                |
+| apellido_mat | varchar(50) | YES  |     | NULL    |                |
+| fecha_nac    | date        | YES  |     | NULL    |                |
+| rfc          | varchar(13) | YES  |     | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.0018 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas(
+                                     ... id, nombre, apellido_pat, apellido_mat, fecha_nac)
+                                     ... values(6877," pele"," elcrack", "dinho",05/11/1975)
+                                     ... ;
+Query OK, 1 row affected (0.2010 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat, apellido_mat, fecha_nac) values(6845," gru","juarez", "lopez",15/10/1975) ;
+Query OK, 1 row affected (0.2178 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat, apellido_mat, fecha_nac) values(69435,"lacandona","britanny", "pepto",25/05/2002) ;
+Query OK, 1 row affected (0.1090 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat, apellido_mat, fecha_nac) values(6872,"lagartona","turner", "perez",08/02/1995) ;
+Query OK, 1 row affected (0.2166 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat, apellido_mat, fecha_nac) values(98765,"negra","tomasa", "blanca",09/04/1996) ;
+Query OK, 1 row affected (0.1807 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat, apellido_mat, fecha_nac) values(28725,"isai","guilberrt", "gorda",02/02/1992) ;
+Query OK, 1 row affected (0.1460 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat, apellido_mat, fecha_nac) values(76875,"fausto","cecilia", "delgado",12/04/1896) ;
+Query OK, 1 row affected (0.1924 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat, apellido_mat, fecha_nac) values(87521,"pinky","patricia", "rosa",28/08/1996) ;
+Query OK, 1 row affected (0.1871 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat,fecha_nac) values(321554,"cristiano","ronaldo",07/07/1777) ;
+Query OK, 1 row affected (0.1873 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > insert into personas( id, nombre, apellido_pat, apellido_mat, fecha_nac) values(101010,"Lionel","Andres", "Messi",10/10/1910) ;
+Query OK, 1 row affected (0.1339 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > desc personas;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| id           | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nombre       | varchar(50) | NO   |     | NULL    |                |
+| apellido_pat | varchar(50) | NO   |     | NULL    |                |
+| apellido_mat | varchar(50) | YES  |     | NULL    |                |
+| fecha_nac    | date        | YES  |     | NULL    |                |
+| rfc          | varchar(13) | YES  |     | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.0017 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > select * from personas;
++--------+-----------+--------------+--------------+------------+------+
+| id     | nombre    | apellido_pat | apellido_mat | fecha_nac  | rfc  |
++--------+-----------+--------------+--------------+------------+------+
+|   6845 |  gru      | juarez       | lopez        | 0000-00-00 | NULL |
+|   6872 | lagartona | turner       | perez        | 0000-00-00 | NULL |
+|   6877 |  pele     |  elcrack     | dinho        | 0000-00-00 | NULL |
+|  28725 | isai      | guilberrt    | gorda        | 0000-00-00 | NULL |
+|  69435 | lacandona | britanny     | pepto        | 0000-00-00 | NULL |
+|  76875 | fausto    | cecilia      | delgado      | 0000-00-00 | NULL |
+|  87521 | pinky     | patricia     | rosa         | 0000-00-00 | NULL |
+|  98765 | negra     | tomasa       | blanca       | 0000-00-00 | NULL |
+| 101010 | Lionel    | Andres       | Messi        | 0000-00-00 | NULL |
+| 321554 | cristiano | ronaldo      | NULL         | 0000-00-00 | NULL |
++--------+-----------+--------------+--------------+------------+------+
+10 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > SELECT generar_rfc ('gru', 'juarez', 'lopez', '1990/08/06)
+                                     ... ;
+                                     ... ;
+                                     ...
+                                     ...
+                                     ...
+                                     ... ;;;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''1990/08/06)' at line 1
+
+ MySQL  localhost:3306 ssl  eva_3  SQL > SELECT generar_rfc ('gru', 'juarez', 'lopez', '1990/08/06);
+
+
+
+
+
+
+
+
+
